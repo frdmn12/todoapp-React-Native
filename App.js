@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -6,29 +6,54 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Keyboard,
   ScrollView,
+  Button,
 } from 'react-native';
 import {Todo} from './src/screens';
+
+const [task, setTask] = useState();
+// const [] = useState([]);
+
+const handleTask = () => {
+  console.log(task);
+};
 
 const App = () => {
   return (
     <View style={styles.containers}>
+      {/* Main Title */}
       <Text style={styles.titleDays}>Todo list</Text>
+
+      {/* The task */}
       <ScrollView>
         <View style={styles.taskContainer}>
           <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
         </View>
       </ScrollView>
+
+      {/*  The Input */}
       <KeyboardAvoidingView>
-        <TextInput style={styles.inputText} />
+        <View style={styles.inputContain}>
+          <View>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Write your task"
+              placeholderTextColor="white"
+              // value={task}
+              // onChange={text => setTask(text)}
+            />
+          </View>
+          <View style={styles.buttonAdd}>
+            {/* <Button title="+" /> */}
+            <TouchableOpacity
+              // onPress={() => {
+              //   handleTask();
+              // }}
+              >
+              <Text style={styles.btn}>+</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </KeyboardAvoidingView>
     </View>
   );
@@ -37,8 +62,7 @@ const App = () => {
 const styles = StyleSheet.create({
   containers: {
     flex: 1,
-    // backgroundColor: '#e7e6e1',
-    backgroundColor: '#f6f6f6',
+    // backgroundColor: '#f6f6f6',
   },
   taskContainer: {
     backgroundColor: '#161d6f',
@@ -58,16 +82,27 @@ const styles = StyleSheet.create({
     color: '#c7ffd8',
     borderColor: '#FFF',
   },
+  inputContain: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    // backgroundColor: "f6f6f6"
+    // marginBottom :4
+  },
   inputText: {
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    backgroundColor: '#FFF',
-    borderRadius: 60,
-    borderColor: '#C0C0C0',
-    borderWidth: 1,
-    width: 250,
-    // backgroundColor: '#161d6f',
-    // color: 'white',
+    backgroundColor: '#161d6f',
+    color: '#fff',
+    paddingHorizontal: 100,
+    borderRadius: 20,
+    marginTop: 10,
+  },
+  buttonAdd: {
+    padding: 20,
+    backgroundColor: '#c7ffd8',
+    marginBottom: 4,
+    borderRadius: 25,
+  },
+  btn: {
+    fontSize: 20,
   },
 });
 
