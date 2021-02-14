@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -9,66 +9,121 @@ import {
   Keyboard,
   ScrollView,
 } from 'react-native';
-import {Todo} from './src/screens';
+import {Task} from './src/components';
 
-const App = () => {
+export default function App() {
+  const [task, setTask] = useState();
+  const [taskItems, setTaskItems] = useState([]);
+
+  const AddTask = () => {
+    Keyboard.dismiss();
+    setTaskItems([...taskItems, task]);
+    setTask(null);
+  };
+
+  const completeTask = (index) => {
+    let itemsCopy = [...taskItems];
+    itemsCopy.splice(index, 1); // delete
+    setTaskItems(itemsCopy); // nampilin setelah di delete
+  };
+
   return (
-    <View style={styles.containers}>
-      <Text style={styles.titleDays}>Todo list</Text>
-      <ScrollView>
-        <View style={styles.taskContainer}>
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
-          <Todo text="Task 1 masak nasi goreng di rumah" />
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
+        keyboardShouldPersistTaps="handled">
+        <View style={styles.tasksWrapper}>
+        {/* Main Contain */}
+          <Text style={styles.sectionTitle}>Today List</Text>
+
+          {/* Section List */}
+          <View style={styles.items}>
+            {taskItems.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => completeTask(index)}>
+                  <Task text={item} />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </View>
       </ScrollView>
-      <KeyboardAvoidingView>
-        <TextInput style={styles.inputText} />
+
+      {/* Input Contain */}
+      <KeyboardAvoidingView
+        // behavior={Platform.OS === 'android' ? 'height' : 'padding'}
+        style={styles.writeTaskWrapper}>
+        <TextInput
+          style={styles.input}
+          placeholder={'Task for today ?'}
+          placeholderTextColor="grey"
+          value={task}
+          onChangeText={(text) => setTask(text)}
+        />
+        <TouchableOpacity onPress={() => AddTask()}>
+          <View style={styles.addWrapper}>
+            <Text style={styles.addText}>+</Text>
+          </View>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  containers: {
+  container: {
     flex: 1,
-    // backgroundColor: '#e7e6e1',
-    backgroundColor: '#f6f6f6',
+    backgroundColor: '#E8EAED',
   },
-  taskContainer: {
-    backgroundColor: '#161d6f',
-    padding: 3,
-    marginVertical: 4,
-    marginHorizontal: 4,
-    borderRadius: 10,
+  tasksWrapper: {
+    paddingTop: 80,
+    paddingHorizontal: 20,
   },
-  titleDays: {
-    marginVertical: 10,
-    marginHorizontal: 4,
-    borderRadius: 10,
-    paddingLeft: 14,
-    fontSize: 40,
+  sectionTitle: {
+    fontSize: 24,
     fontWeight: 'bold',
-    backgroundColor: '#161d6f',
-    color: '#c7ffd8',
-    borderColor: '#FFF',
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    padding: 15,
+    borderRadius: 30,
+    backgroundColor: 'blue',
+    color: 'white',
+    // borderWidth : 5
   },
-  inputText: {
+  items: {
+    marginTop: 25,
+    borderRadius : 15,
+    backgroundColor : "blue"
+  },
+  writeTaskWrapper: {
+    position: 'absolute',
+    bottom: 30,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  input: {
     paddingVertical: 15,
     paddingHorizontal: 15,
     backgroundColor: '#FFF',
-    borderRadius: 60,
-    borderColor: '#C0C0C0',
-    borderWidth: 1,
+    borderRadius: 34,
     width: 250,
-    // backgroundColor: '#161d6f',
-    // color: 'white',
+  },
+  addText: {
+    fontSize: 30,
+  },
+  addWrapper: {
+    width: 60,
+    height: 60,
+    backgroundColor: '#FFF',
+    borderRadius: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
-
-export default App;
