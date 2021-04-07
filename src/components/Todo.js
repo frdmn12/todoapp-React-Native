@@ -3,24 +3,14 @@ import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native';
 
 const Task = (props) => {
   const {text} = props;
-  // const [task, doneTask] = useState(true);
-  // const [del ,delTask] = useState()
   return (
     <View style={styles.item}>
       <View style={styles.itemLeft}>
         <View style={styles.square}>
-          {/* <Button
-            onPress={() => {
-              doneTask(false);
-            }}
-            disabled={!task}
-            title={task ? '' : 'done'}
-          /> */}
         </View>
         <Text style={styles.itemText}>{text}</Text>
       </View>
       <View style={styles.del}>
-        {/* <Button title="x"/> */}
       </View>
     </View>
   );

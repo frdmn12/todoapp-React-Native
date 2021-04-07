@@ -9,101 +9,121 @@ import {
   ScrollView,
   Button,
 } from 'react-native';
-import {Todo} from './src/screens';
+import {Task} from './src/components';
 
-const [task, setTask] = useState();
-// const [] = useState([]);
+export default function App() {
+  const [task, setTask] = useState();
+  const [taskItems, setTaskItems] = useState([]);
 
-const handleTask = () => {
-  console.log(task);
-};
+  const AddTask = () => {
+    Keyboard.dismiss();
+    setTaskItems([...taskItems, task]);
+    setTask(null);
+  };
 
-const App = () => {
+  const completeTask = (index) => {
+    let itemsCopy = [...taskItems];
+    itemsCopy.splice(index, 1); // delete
+    setTaskItems(itemsCopy); // nampilin setelah di delete
+  };
+
   return (
-    <View style={styles.containers}>
-      {/* Main Title */}
-      <Text style={styles.titleDays}>Todo list</Text>
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
+        keyboardShouldPersistTaps="handled">
+        <View style={styles.tasksWrapper}>
+        {/* Main Contain */}
+          <Text style={styles.sectionTitle}>Today List</Text>
 
-      {/* The task */}
-      <ScrollView>
-        <View style={styles.taskContainer}>
-          <Todo text="Task 1 masak nasi goreng di rumah" />
+          {/* Section List */}
+          <View style={styles.items}>
+            {taskItems.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => completeTask(index)}>
+                  <Task text={item} />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </View>
       </ScrollView>
 
-      {/*  The Input */}
-      <KeyboardAvoidingView>
-        <View style={styles.inputContain}>
-          <View>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Write your task"
-              placeholderTextColor="white"
-              // value={task}
-              // onChange={text => setTask(text)}
-            />
+      {/* Input Contain */}
+      <KeyboardAvoidingView
+        // behavior={Platform.OS === 'android' ? 'height' : 'padding'}
+        style={styles.writeTaskWrapper}>
+        <TextInput
+          style={styles.input}
+          placeholder={'Task for today ?'}
+          placeholderTextColor="grey"
+          value={task}
+          onChangeText={(text) => setTask(text)}
+        />
+        <TouchableOpacity onPress={() => AddTask()}>
+          <View style={styles.addWrapper}>
+            <Text style={styles.addText}>+</Text>
           </View>
-          <View style={styles.buttonAdd}>
-            {/* <Button title="+" /> */}
-            <TouchableOpacity
-              // onPress={() => {
-              //   handleTask();
-              // }}
-              >
-              <Text style={styles.btn}>+</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  containers: {
+  container: {
     flex: 1,
-    // backgroundColor: '#f6f6f6',
+    backgroundColor: '#E8EAED',
   },
-  taskContainer: {
-    backgroundColor: '#161d6f',
-    padding: 3,
-    marginVertical: 4,
-    marginHorizontal: 4,
-    borderRadius: 10,
+  tasksWrapper: {
+    paddingTop: 80,
+    paddingHorizontal: 20,
   },
-  titleDays: {
-    marginVertical: 10,
-    marginHorizontal: 4,
-    borderRadius: 10,
-    paddingLeft: 14,
-    fontSize: 40,
+  sectionTitle: {
+    fontSize: 24,
     fontWeight: 'bold',
-    backgroundColor: '#161d6f',
-    color: '#c7ffd8',
-    borderColor: '#FFF',
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    padding: 15,
+    borderRadius: 30,
+    backgroundColor: 'blue',
+    color: 'white',
+    // borderWidth : 5
   },
-  inputContain: {
+  items: {
+    marginTop: 25,
+    borderRadius : 15,
+    backgroundColor : "blue"
+  },
+  writeTaskWrapper: {
+    position: 'absolute',
+    bottom: 30,
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    // backgroundColor: "f6f6f6"
-    // marginBottom :4
+    alignItems: 'center',
   },
-  inputText: {
-    backgroundColor: '#161d6f',
-    color: '#fff',
-    paddingHorizontal: 100,
-    borderRadius: 20,
-    marginTop: 10,
+  input: {
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    backgroundColor: '#FFF',
+    borderRadius: 34,
+    width: 250,
   },
-  buttonAdd: {
-    padding: 20,
-    backgroundColor: '#c7ffd8',
-    marginBottom: 4,
-    borderRadius: 25,
+  addText: {
+    fontSize: 30,
   },
-  btn: {
-    fontSize: 20,
+  addWrapper: {
+    width: 60,
+    height: 60,
+    backgroundColor: '#FFF',
+    borderRadius: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
-
-export default App;
