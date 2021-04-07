@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native';
 
 const Task = (props) => {
+  // tes
   const {text} = props;
   return (
     <View style={styles.item}>
